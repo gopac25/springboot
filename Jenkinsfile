@@ -3,9 +3,8 @@ pipeline {
 
    environment {
      // You must set the following environment variables
-     // ORGANIZATION_NAME
-     // YOUR_DOCKERHUB_USERNAME (it doesn't matter if you don't have one)
-
+     ORGANIZATION_NAME = "myfleetman"
+     YOUR_DOCKERHUB_USERNAME = "gopac"
      SERVICE_NAME = "fleetman-position-tracker"
      REPOSITORY_TAG="${YOUR_DOCKERHUB_USERNAME}/${ORGANIZATION_NAME}-${SERVICE_NAME}:${BUILD_ID}"
    }
