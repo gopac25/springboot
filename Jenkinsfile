@@ -2,13 +2,15 @@ pipeline {
    agent any
 
    environment {
-     // You must set the following environment variables
-     ORGANIZATION_NAME = "myfleetman"
+     ORGANIZATION_NAME = "gopac25"
      YOUR_DOCKERHUB_USERNAME = "gopac"
-     SERVICE_NAME = "fleetman-position-tracker"
-     REPOSITORY_TAG="${YOUR_DOCKERHUB_USERNAME}/${ORGANIZATION_NAME}-${SERVICE_NAME}:${BUILD_ID}"
-   }
 
+     SERVICE_NAME = "springboot"
+     registry="${YOUR_DOCKERHUB_USERNAME}/${ORGANIZATION_NAME}-${SERVICE_NAME}:latest"
+     registryCredential = 'dockerhub'
+     dockerImage = ''
+   }
+   
    stages {
       stage('Preparation') {
          steps {
@@ -18,20 +20,56 @@ pipeline {
       }
       stage('Build') {
          steps {
-            sh '''mvn clean package'''
+         script {
+            sh "mvn clean package"
+         }
          }
       }
-
-      stage('Build and Push Image') {
+      stage('Code Analysis') {
          steps {
-           sh 'docker image build -t ${REPOSITORY_TAG} .'
+         script {
+           sh "mvn sonar:sonar"
+         }
          }
       }
-
-      //stage('Deploy to Cluster') {
-       //   steps {
-         //           sh 'envsubst < ${WORKSPACE}/deploy.yaml | kubectl apply -f -'
-          //}
+      
+           stage('Deploy to Nexus') {
+         steps {
+         script {
+          sh "mvn deploy"
+         }
+         }
+      }
+    stage('Building image') {
+      steps{
+        script {
+          dockerImage = docker.build registry
+        }
+      }
+    }
+    stage('Deploy Image') {
+      steps{
+        script {
+          docker.withRegistry( '', registryCredential ) {
+            dockerImage.push()
+          }
+        }
+      }
+    }
+      //stage('Deploy to k8s'){
+        //    steps{
+          //      sshagent(['kops-machine']) {
+            //        sh 'envsubst < ${WORKSPACE}/deploy.yaml'
+              //      sh "scp -o StrictHostKeyChecking=no deploy.yaml ec2-user@13.235.114.100:/home/ec2-user/"
+                //    script{
+                  //      try{
+                    //        sh "ssh ec2-user@13.235.114.100 kubectl apply -f ."
+                      //  }catch(error){
+                        //    sh "ssh ec2-user@13.235.114.100 kubectl create -f ."
+                       // }
+            //        }
+          //      }
+        //    }
       //}
    }
 }
