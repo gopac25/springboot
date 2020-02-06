@@ -51,6 +51,11 @@
 		   <groupId>org.springframework.boot</groupId>
 		   <artifactId>spring-boot-starter-data-mongodb</artifactId>
 		</dependency>
+		<dependency>
+  		<groupId>javax.servlet</groupId>
+  		<artifactId>javax.servlet-api</artifactId>
+  		<version>3.0.1</version>
+  	</dependency>
 			
 	</dependencies>
 
@@ -101,13 +106,4 @@
             <url>http://192.168.145.146:8081/repository/myproject-release/</url>
         </repository>
     </distributionManagement>
-  <dependencies>
-    <dependency>
-  		<groupId>javax.servlet</groupId>
-  		<artifactId>javax.servlet-api</artifactId>
-  		<version>3.0.1</version>
-  	</dependency>
-  </dependencies>
-
-
 </project>
