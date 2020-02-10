@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: position-tracker
+  name: springboot
 spec:
   selector:
     matchLabels:
-      app: position-tracker
+      app: springboot
   replicas: 1
   template: # template for the pods
     metadata:
       labels:
-        app: position-tracker
+        app: springboot
     spec:
       containers:
-      - name: position-tracker
+      - name: springboot
         image: ${REPOSITORY_TAG}
         env:
         - name: SPRING_PROFILES_ACTIVE
@@ -27,14 +27,14 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: fleetman-position-tracker
+  name: springboot
 
 spec:
   # This defines which pods are going to be represented by this Service
   # The service becomes a network endpoint for either other services
   # or maybe external users to connect to (eg browser)
   selector:
-    app: position-tracker
+    app: springboot
 
   ports:
     - name: http
