@@ -63,9 +63,9 @@ pipeline {
                     sh "scp -o StrictHostKeyChecking=no deploy.yaml ec2-user@13.233.215.97:/home/ec2-user/"
                    script{
                        try{
-                            sh "ssh ec2-user@13.235.114.100 kubectl apply -f ."
+                            sh "ssh ec2-user@13.233.215.97 kubectl apply -f ."
                       }catch(error){
-                            sh "ssh ec2-user@13.235.114.100 kubectl create -f ."
+                            sh "ssh ec2-user@13.233.215.97 kubectl create -f ."
                         }
                     }
                 }
