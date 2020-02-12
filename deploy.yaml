@@ -1,43 +1,39 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: springboot
+  name: javaspringboot
 spec:
   selector:
     matchLabels:
-      app: springboot
+      app: javaspringboot
   replicas: 1
-  template: # template for the pods
+  template:
     metadata:
       labels:
-        app: springboot
+        app: javaspringboot
     spec:
       containers:
-      - name: springboot
-        image: ${REPOSITORY_TAG}
+      - name: javaspringboot
+        image: gopac/gopac25-javaspringboot
         env:
         - name: SPRING_PROFILES_ACTIVE
           value: production-microservice
-        imagePullPolicy: Never
-        readinessProbe:
-          httpGet:
-            path: /healthz
-            port: 8080
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: springboot
+  name: javaspringboot-service
 
 spec:
-  # This defines which pods are going to be represented by this Service
-  # The service becomes a network endpoint for either other services
-  # or maybe external users to connect to (eg browser)
   selector:
-    app: springboot
+    app: javaspringboot
 
+  ports:
   ports:
     - name: http
       port: 8080
 
-  type: ClusterIP
+    - name: endpoint
+      port: 30020
+
+  type: LoadBalancer
